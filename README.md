@@ -1,2 +1,2 @@
 # jspsych
-this is jspsych program
+This is jspsych program
