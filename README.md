@@ -1,3 +1,3 @@
 # jspsych-libet
-This is based on "https://unpkg.com/@jspsych-contrib/plugin-libet-intentional-binding@1.2.0"  
+This is based on "https://github.com/jspsych/jspsych-contrib/tree/main/packages/plugin-libet-intentional-binding"  
 This project is for Japanese.  
