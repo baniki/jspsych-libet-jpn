@@ -13,35 +13,171 @@
   
   <script>
     /* initialize jsPsych */
-    var jsPsych = initJsPsych({
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
+    var jsPsych = initJsPsych();
+
+    var timeline = [];
+
+    var pra_num = 1;
+    var ex_num = 1;
+
+    var welcome = {
+      type:jsPsychHtmlKeyboardResponse,
+      stimulus: 'リベットクロック課題へようこそ<br>任意のキーを押して次に進んでください'
+    };
+
+    var instructions_BaseTone = {
+      type: jsPsychInstructions,
+      pages: [
+        '試行中, 時計の針が回り始めます',
+        '任意の位置で音が鳴ります',
+        '音が鳴った針の位置を回答してください'
+      ],
+      show_clickable_nav: true
+    }
 
     var instructions = {
       type: jsPsychInstructions,
       pages: [
-        'リベットクロック課題へようこそ',
         '試行中, 時計の針が回り始めます',
-        '1回転から1.5回転の間の任意の位置でキーを押してください',
-        'その後、次のページの指示に従います'
+        '1〜1.5回転の間の任意の位置でキーを押してください',
+        'その後、次のページの指示に従ってください'
       ],
       show_clickable_nav: true
     }
-    var pre_trial = {
+
+    var pra_trial = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: '任意のキーを押して試行を開始'
+      stimulus: '練習試行を行います<br>任意のキーを押して試行を開始してください'
     }
 
-    var libet_trial = {
+    var ex_trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '本番試行を行います<br>任意のキーを押して試行を開始してください'
+    }
+
+    /* Baseline key */
+    var TL_BaseKey =[];
+
+    TL_BaseKey.push(instructions, pra_trial)
+
+    var baseline_key = {
       type: jsPsychLibetIntentionalBinding,
-      cond: 'operant-tone',
+      cond: 'baseline-key',
       tone_file: 'tone.mp3',
-      instructions: '音が鳴ったとき、時計の針はどこにありましたか？<br>矢印キーで移動し、エンターキーで確定してください',
+      instructions: 
+          'キーを押したとき、時計の針はどこにありましたか？' +
+          '<br>矢印キーで移動し、エンターキーで確定してください',
       feedback: true
     }
 
-    jsPsych.run([instructions, pre_trial, libet_trial]);
+    var pra_baseline_key = {
+      timeline: [baseline_key],
+      repetitions: pra_num
+    } 
+
+    TL_BaseKey.push(pra_baseline_key);
+
+    TL_BaseKey.push(ex_trial)
+
+    var ex_baseline_key = {
+      timeline: [baseline_key],
+      repetitions: ex_num
+    } 
+    TL_BaseKey.push(ex_baseline_key)
+
+    /* Baseline tone */
+    var TL_BaseTone =[];
+
+    TL_BaseTone.push(instructions_BaseTone, pra_trial)
+
+    var baseline_tone = {
+      type: jsPsychLibetIntentionalBinding,
+      cond: 'baseline-tone',
+      tone_file: 'tone.mp3',
+      instructions: 
+          '音が鳴ったとき、時計の針はどこにありましたか？' +
+          '<br>矢印キーで移動し、エンターキーで確定してください',
+      feedback: true
+    }
+
+    var pra_baseline_tone = {
+      timeline: [baseline_tone],
+      repetitions: pra_num
+    } 
+
+    TL_BaseTone.push(pra_baseline_tone);
+
+    TL_BaseTone.push(ex_trial)
+
+    var ex_baseline_tone = {
+      timeline: [baseline_tone],
+      repetitions: ex_num
+    } 
+    TL_BaseTone.push(ex_baseline_tone)
+
+    /* Operant key */
+    var TL_OpKey =[];
+
+    TL_OpKey.push(instructions, pra_trial)
+
+    var operant_key = {
+      type: jsPsychLibetIntentionalBinding,
+      cond: 'operant-key',
+      tone_file: 'tone.mp3',
+      instructions: 
+          'キーを押したとき、時計の針はどこにありましたか？' +
+          '<br>矢印キーで移動し、エンターキーで確定してください',
+      feedback: true
+    }
+
+    var pra_operant_key = {
+      timeline: [operant_key],
+      repetitions: pra_num
+    } 
+
+    TL_OpKey.push(pra_operant_key);
+
+    TL_OpKey.push(ex_trial)
+
+    var ex_operant_key = {
+      timeline: [operant_key],
+      repetitions: ex_num
+    } 
+    TL_OpKey.push(ex_operant_key)
+
+    /* Operant tone */
+    var TL_OpTone =[];
+
+    TL_OpTone.push(instructions, pra_trial)
+
+    var operant_tone = {
+      type: jsPsychLibetIntentionalBinding,
+      cond: 'operant-tone',
+      tone_file: 'tone.mp3',
+      instructions: 
+          '音が鳴ったとき、時計の針はどこにありましたか？' +
+          '<br>矢印キーで移動し、エンターキーで確定してください',
+      feedback: true
+    }
+
+    var pra_operant_tone = {
+      timeline: [operant_tone],
+      repetitions: pra_num
+    } 
+
+    TL_OpTone.push(pra_operant_tone);
+
+    TL_OpTone.push(ex_trial)
+
+    var ex_operant_tone = {
+      timeline: [operant_tone],
+      repetitions: ex_num
+    } 
+    TL_OpTone.push(ex_operant_tone)
+
+    const merged = [...TL_BaseKey, ...TL_BaseTone, ...TL_OpKey, ...TL_OpTone];
+
+    jsPsych.run(merged);
+
   </script>
 </html>
