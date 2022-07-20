@@ -69,9 +69,12 @@
       cond: 'baseline-key',
       tone_file: 'tone.mp3',
       instructions: 
-          'キーを押したとき、時計の針はどこにありましたか？' +
+          '<b>キーを押したとき</b>、時計の針はどこにありましたか？' +
           '<br>矢印キーで移動し、エンターキーで確定してください',
-      feedback: true
+      feedback: false,
+      early_fcn: function(){
+        return '1-1.5回転の間にキーを押してください'
+      }
     }
 
     var pra_baseline_key = {
@@ -99,7 +102,7 @@
       cond: 'baseline-tone',
       tone_file: 'tone.mp3',
       instructions: 
-          '音が鳴ったとき、時計の針はどこにありましたか？' +
+          '<b>音が鳴ったとき</b>、時計の針はどこにありましたか？' +
           '<br>矢印キーで移動し、エンターキーで確定してください',
       feedback: true
     }
@@ -129,7 +132,7 @@
       cond: 'operant-key',
       tone_file: 'tone.mp3',
       instructions: 
-          'キーを押したとき、時計の針はどこにありましたか？' +
+          '<b>キーを押したとき</b>、時計の針はどこにありましたか？' +
           '<br>矢印キーで移動し、エンターキーで確定してください',
       feedback: true
     }
@@ -159,7 +162,7 @@
       cond: 'operant-tone',
       tone_file: 'tone.mp3',
       instructions: 
-          '音が鳴ったとき、時計の針はどこにありましたか？' +
+          '<b>音が鳴ったとき</b>、時計の針はどこにありましたか？' +
           '<br>矢印キーで移動し、エンターキーで確定してください',
       feedback: true
     }
