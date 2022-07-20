@@ -13,7 +13,11 @@
   
   <script>
     /* initialize jsPsych */
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var timeline = [];
 
@@ -22,14 +26,14 @@
 
     var welcome = {
       type:jsPsychHtmlKeyboardResponse,
-      stimulus: 'リベットクロック課題へようこそ<br>任意のキーを押して次に進んでください'
+      stimulus: 'リベットクロック課題へようこそ<br>キーを押して次に進んでください'
     };
 
     var instructions_BaseTone = {
       type: jsPsychInstructions,
       pages: [
         '試行中, 時計の針が回り始めます',
-        '任意の位置で音が鳴ります',
+        'いずれかの位置で音が鳴ります',
         '音が鳴った針の位置を回答してください'
       ],
       show_clickable_nav: true
@@ -47,7 +51,7 @@
 
     var pra_trial = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: '練習試行を行います<br>任意のキーを押して試行を開始してください'
+      stimulus: '練習試行を行います<br>キーを押して試行を開始してください'
     }
 
     var ex_trial = {
@@ -55,7 +59,7 @@
       stimulus: '本番試行を行います<br>任意のキーを押して試行を開始してください'
     }
 
-    /* Baseline key */
+//////* Baseline key *///////
     var TL_BaseKey =[];
 
     TL_BaseKey.push(instructions, pra_trial)
@@ -85,7 +89,7 @@
     } 
     TL_BaseKey.push(ex_baseline_key)
 
-    /* Baseline tone */
+///////* Baseline tone *///////
     var TL_BaseTone =[];
 
     TL_BaseTone.push(instructions_BaseTone, pra_trial)
@@ -115,7 +119,7 @@
     } 
     TL_BaseTone.push(ex_baseline_tone)
 
-    /* Operant key */
+///////* Operant key *///////
     var TL_OpKey =[];
 
     TL_OpKey.push(instructions, pra_trial)
@@ -145,7 +149,7 @@
     } 
     TL_OpKey.push(ex_operant_key)
 
-    /* Operant tone */
+///////* Operant tone *///////
     var TL_OpTone =[];
 
     TL_OpTone.push(instructions, pra_trial)
@@ -174,8 +178,18 @@
       repetitions: ex_num
     } 
     TL_OpTone.push(ex_operant_tone)
+    
 
+    var goodby = {
+      type:jsPsychHtmlKeyboardResponse,
+      stimulus: 'リベットクロック課題は終了です<br>ご協力ありがとうございました'
+    };
+
+///////* Randomization *///////
     const merged = [...TL_BaseKey, ...TL_BaseTone, ...TL_OpKey, ...TL_OpTone];
+
+    merged.unshift(welcome);
+    merged.push(goodby);
 
     jsPsych.run(merged);
 
