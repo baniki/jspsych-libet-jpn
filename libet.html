@@ -6,6 +6,8 @@
     <script src="https://unpkg.com/jspsych@7.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-instructions@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych-contrib/plugin-libet-intentional-binding@1.2.0"></script>
     <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
@@ -19,16 +21,39 @@
       }
     });
 
-    var timeline = [];
-
-    var pra_num = 1;
+    var pra_num = 2;
     var ex_num = 1;
+
+//////* Participants *///////
+    var par_id = {
+      id: jsPsych.randomization.randomID(12)
+    }
+
+    var par_age= {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: '年齢を入力してください', required: true, name: 'age'},
+      ]
+    }
+    var par_gender = {
+      type: jsPsychSurveyMultiChoice,
+      questions: [
+        {
+          prompt: "性別を選択してください", 
+          name: '性別', 
+          options: ['男性', '女性'], 
+          horizontal: true, 
+          required: true
+        }
+      ],
+    };
 
     var welcome = {
       type:jsPsychHtmlKeyboardResponse,
       stimulus: 'リベットクロック課題へようこそ<br>キーを押して次に進んでください'
     };
 
+//////* Instruction *///////
     var instructions_BaseTone = {
       type: jsPsychInstructions,
       pages: [
@@ -43,7 +68,7 @@
       type: jsPsychInstructions,
       pages: [
         '試行中, 時計の針が回り始めます',
-        '1〜1.5回転の間の任意の位置でキーを押してください',
+        '</b>1〜1.5回転の間の<b>任意の位置でキーを押してください',
         'その後、次のページの指示に従ってください'
       ],
       show_clickable_nav: true
@@ -75,7 +100,7 @@
       early_fcn: function(){
         var text = {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: '1-1.5回転の間にキーを押してください',
+          stimulus: 'too early!!',
           trial_duration: 1000,
         };
         console.log(text)
@@ -110,7 +135,7 @@
       instructions: 
           '<b>音が鳴ったとき</b>、時計の針はどこにありましたか？' +
           '<br>矢印キーで移動し、エンターキーで確定してください',
-      feedback: true
+      feedback: false
     }
 
     var pra_baseline_tone = {
@@ -140,7 +165,7 @@
       instructions: 
           '<b>キーを押したとき</b>、時計の針はどこにありましたか？' +
           '<br>矢印キーで移動し、エンターキーで確定してください',
-      feedback: true
+      feedback: false
     }
 
     var pra_operant_key = {
@@ -170,7 +195,7 @@
       instructions: 
           '<b>音が鳴ったとき</b>、時計の針はどこにありましたか？' +
           '<br>矢印キーで移動し、エンターキーで確定してください',
-      feedback: true
+      feedback: false
     }
 
     var pra_operant_tone = {
@@ -188,19 +213,29 @@
     } 
     TL_OpTone.push(ex_operant_tone)
     
-
+///////* Goodby *///////
     var goodby = {
       type:jsPsychHtmlKeyboardResponse,
       stimulus: 'リベットクロック課題は終了です<br>ご協力ありがとうございました'
     };
 
 ///////* Randomization *///////
-    const merged = [...TL_BaseKey, ...TL_BaseTone, ...TL_OpKey, ...TL_OpTone];
+    const merged = [TL_BaseKey, TL_BaseTone, TL_OpKey, TL_OpTone];
+    console.log(merged)
 
-    merged.unshift(welcome);
-    merged.push(goodby);
+    var array = [0,1,2,3]
+    var shuffle = jsPsych.randomization.repeat(array, 1);
 
-    jsPsych.run(merged);
+    var rand = []
+    shuffle.forEach(function( i ) {
+      rand = rand.concat(merged[i])
+    });
+    console.log(rand)
+
+    rand.unshift(par_age, par_gender, welcome);
+    rand.push(goodby);
+    console.log(rand)
+    jsPsych.run(rand);
 
   </script>
 </html>
